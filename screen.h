@@ -36,9 +36,9 @@ typedef enum {GOODDISPLAY75, GOODDISPLAY42, WAVESHARE2IN7} screen_type_t;
 #include "gooddisplay42_pinout.h"
 #endif
 
-//#ifdef USE_WAVESHARE2IN7
+#ifdef USE_WAVESHARE2IN7
 #include "waveshare2in7_pinout.h"
-//#endif
+#endif
 
 // Dirty hack. We don't need this 
 // struct. TODO clean this.

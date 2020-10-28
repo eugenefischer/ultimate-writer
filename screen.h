@@ -107,11 +107,16 @@ extern const unsigned char lut_bw_27[];
 extern const unsigned char lut_bb_27[];
 extern const unsigned char lut_wb_27[];
 
+/*
+ * don't need these, same as for 4.2"
+ 
 extern const unsigned char lut_vcom0_fast_27[];
 extern const unsigned char lut_ww_fast_27[];
 extern const unsigned char lut_bw_fast_27[];
 extern const unsigned char lut_bb_fast_27[];
 extern const unsigned char lut_wb_fast_27[];
+
+*/
 
 /* config.h globals */
 extern int borderpx;

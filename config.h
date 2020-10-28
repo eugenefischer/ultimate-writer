@@ -119,6 +119,15 @@ unsigned int cols = 24;
 unsigned int rows = 12;
 #endif
 
+#ifdef USE_WAVESHARE2IN7
+unsigned int screen_type = WAVESHARE2IN7;
+/*
+ * Default columns and rows numbers
+ */
+unsigned int cols = 16;
+unsigned in rows = 7;
+#endif
+
 /*
  * Default shape of cursor
  * 2: Block ("█")

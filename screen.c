@@ -21,10 +21,10 @@ int init_if(void){
     printf("Cannot init BCM2835. Is the kernel module installed?\n");
     exit(-1);
   }
-  bcm2835_gpio_fsel(CS_PIN, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(BUSY_PIN, BCM2835_GPIO_FSEL_INPT);
   bcm2835_gpio_fsel(RST_PIN, BCM2835_GPIO_FSEL_OUTP);
   bcm2835_gpio_fsel(DC_PIN, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(BUSY_PIN, BCM2835_GPIO_FSEL_INPT);
+  bcm2835_gpio_fsel(CS_PIN, BCM2835_GPIO_FSEL_OUTP);
 
   if(!bcm2835_spi_begin()){                                         //Start spi interface, set spi pin for the reuse function
     printf("Cannot init SPI interface. Is it activated in raspi-config?\n");

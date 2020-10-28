@@ -14,7 +14,7 @@
 #define COLORED                                     1
 #define UNCOLORED                                   0
 
-typedef enum {GOODDISPLAY75, GOODDISPLAY42} screen_type_t;
+typedef enum {GOODDISPLAY75, GOODDISPLAY42, WAVESHARE2IN7} screen_type_t;
 
 /*
  * Screen installed on the typewriter.
@@ -22,9 +22,11 @@ typedef enum {GOODDISPLAY75, GOODDISPLAY42} screen_type_t;
  * Set to:
  *   - USE_GOODDISPLAY75 for waveshare/good display 7.5" screen.
  *   - USE_GOODDISPLAY42 for waveshare/good display 4.2" screen.
+ *   - USE_WAVESHARE2IN7 for waveshare 2.7" screen
  */
-#define USE_GOODDISPLAY42
+// #define USE_GOODDISPLAY42
 // #define USE_GOODDISPLAY75
+#define USE_WAVESHARE2IN7
 
 #ifdef USE_GOODDISPLAY75
 #include "gooddisplay75_pinout.h"
@@ -32,6 +34,10 @@ typedef enum {GOODDISPLAY75, GOODDISPLAY42} screen_type_t;
 
 #ifdef USE_GOODDISPLAY42
 #include "gooddisplay42_pinout.h"
+#endif
+
+#ifdef USE_WAVESHARE2IN7
+#include "waveshare2in7_pinout.h"
 #endif
 
 // Dirty hack. We don't need this 
@@ -51,20 +57,25 @@ void spi_transfer(unsigned char data);
 int sinit(void);
 int init_waveshare_75(void);
 int init_waveshare_42(void);
+int init_waveshare_27(void);
 void sreset(void);
 void ssend_command(unsigned char command);
 void ssend_data(unsigned char data);
 void sdisplay_frame(const unsigned char* frame_buffer);
 void sdisplay_frame_75(const unsigned char* frame_buffer);
 void sdisplay_frame_42(const unsigned char* frame_buffer);
+void sdisplay_frame_27(const unsigned char* frame_buffer);
 void sdisplay_frame_fast(const unsigned char* frame_buffer);
 void sdisplay_frame_fast_42(const unsigned char* frame_buffer);
+void sdisplay_frame_fast_27(const unsigned char* frame_buffer);
 void swait_until_idle(void);
 void ssleep(void);
 void set_lut(void);
 void set_lut_42(void);
+void set_lut_27(void);
 void set_fast_lut(void);
 void set_fast_lut_42(void);
+void set_fast_lut_27(void);
 // Framebuffer painting functions.
 void pclear(int colored, unsigned char* frame_buffer);
 void pdraw_absolute_pixel(int x, int y, int colored, unsigned char* frame_buffer);
@@ -89,6 +100,18 @@ extern const unsigned char lut_ww_fast_42[];
 extern const unsigned char lut_bw_fast_42[];
 extern const unsigned char lut_bb_fast_42[];
 extern const unsigned char lut_wb_fast_42[];
+
+extern const unsigned char lut_vcom0_27[];
+extern const unsigned char lut_ww_27[];
+extern const unsigned char lut_bw_27[];
+extern const unsigned char lut_bb_27[];
+extern const unsigned char lut_wb_27[];
+
+extern const unsigned char lut_vcom0_fast_27[];
+extern const unsigned char lut_ww_fast_27[];
+extern const unsigned char lut_bw_fast_27[];
+extern const unsigned char lut_bb_fast_27[];
+extern const unsigned char lut_wb_fast_27[];
 
 /* config.h globals */
 extern int borderpx;

@@ -1,6 +1,6 @@
 #include "screen.h"
 //#include "config.h"
-#include "st.h"
+//#include "st.h"
 #include <bcm2835.h>
 #include <stdlib.h>
 #include <stdio.h>

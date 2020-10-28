@@ -60,6 +60,8 @@ int sinit(void) {
       return init_waveshare_75();
     case GOODDISPLAY42 :
       return init_waveshare_42();
+    case WAVESHARE2IN7 :
+      return init_waveshare_27();
   }
 }
 
@@ -182,6 +184,64 @@ int init_waveshare_42(void) {
   return 0;
 }
 
+int init_waveshare_27(void) {
+  printf("Init 27");
+  if (init_if() != 0) {
+    exit(-1);
+  }
+  sreset();
+  ssend_command(POWER_SETTING);
+  ssend_data(0x03);                  // VDS_EN, VDG_EN
+  ssend_data(0x00);                  // VCOM_HV, VGHL_LV[1], VGHL_LV[0]
+  ssend_data(0x2b);                  // VDH
+  ssend_data(0x2b);                  // VDL
+  ssend_data(0x09);                  // VDHR
+  ssend_command(BOOSTER_SOFT_START);
+  ssend_data(0x07);
+  ssend_data(0x07);
+  ssend_data(0x17);                  //07 0f 17 1f 27 2F 37 2f
+  //Power optimization
+  ssend_command(0xF8);
+  ssend_data(0x60);
+  ssend_data(0xA5);
+  //Power optimization
+  ssend_command(0xF8);
+  ssend_data(0x89);
+  ssend_data(0xA5);
+  //Power optimization
+  ssend_command(0xF8);
+  ssend_data(0x90);
+  ssend_data(0x00);
+  //Power optimization
+  ssend_command(0xF8);
+  ssend_data(0x93);
+  ssend_data(0x2A);
+  //Power optimization
+  ssend_command(0xF8);
+  ssend_data(0xA0);
+  ssend_data(0xA5);
+  //Power optimization
+  ssend_command(0xF8);
+  ssend_data(0xA1);
+  ssend_data(0x00);
+  //Power optimization
+  ssend_command(0xF8);
+  ssend_data(0x73);
+  ssend_data(0x41);
+  ssend_command(PARTIAL_DISPLAY_REFRESH);
+  ssend_data(0x00);
+  ssend_command(POWER_ON);
+  swait_until_idle();
+  ssend_command(PANEL_SETTING);
+  ssend_data(0xAF); //KW-BF KWR-AF  BWROTP 0f
+  ssend_command(PLL_CONTROL);
+  ssend_data(0x3A);        // 3A 100Hz   29 150Hz   39 200Hz    31 171Hz
+  ssend_command(VCM_DC_SETTING);
+  ssend_data(0x12);
+  delay_ms(2);
+  return 0;
+}
+
 void sreset(void){
   digital_write(RST_PIN, LOW);
   delay_ms(200);
@@ -206,6 +266,9 @@ void sdisplay_frame(const unsigned char* frame_buffer){
       break;
     GOODDISPLAY42:
       sdisplay_frame_42(frame_buffer);
+      break;
+    WAVESHARE2IN7:
+      sdisplay_frame_27(frame_buffer);
       break;
   }
 }
@@ -686,4 +749,17 @@ const unsigned char lut_wb_fast_42[] ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,         
 };
+
+/*
+ * Helper functions for waveshare2in7
+ */
+
+int nearest_mult_eight(int num, bool round_up) {
+  if(round_up) {
+    return ((number + 7) / 8) * 8;
+  }
+  else {
+    return (number / 8) * 8;
+  }
+}
 

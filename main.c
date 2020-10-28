@@ -18,7 +18,6 @@
 
 #include "screen.h"
 #include "st.h"
-#include "config.h"
 
 static inline ushort sixd_to_16bit(int);
 

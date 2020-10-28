@@ -125,7 +125,7 @@ unsigned int screen_type = WAVESHARE2IN7;
  * Default columns and rows numbers
  */
 unsigned int cols = 16;
-unsigned in rows = 7;
+unsigned int rows = 7;
 #endif
 
 /*

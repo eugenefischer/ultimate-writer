@@ -143,7 +143,7 @@ int init_waveshare_75(void) {
    */
   ssend_data(0x1E);
 
-  ssend_command(TSSET);
+  ssend_command(0xe5); //TSSET, command removed for comilation reasons
   /*
    * Force set temperature for cascade.
    */

@@ -308,6 +308,34 @@ void sdisplay_frame_42(const unsigned char* frame_buffer){
   printf("Displayed frame");
 }
 
+void sdisply_frame_27(const unsigned char* frame_buffer){
+  unsigned int width = 264, height = 176;
+  ssend_command(RESOLUTION_SETTING);
+  ssend_data(width >> 8);        
+  ssend_data(width & 0xff);
+  ssend_data(height >> 8);
+  ssend_data(height & 0xff);
+
+  if (frame_buffer != NULL) {
+      ssend_command(DATA_START_TRANSMISSION_1);
+      for(int i = 0; i < width / 8 * height; i++) {
+          ssend_data(0xFF);      // bit set: white, bit reset: black
+      }
+      delay_ms(2);
+      ssend_command(DATA_START_TRANSMISSION_2); 
+      for(int i = 0; i < width / 8 * height; i++) {
+          ssend_data(frame_buffer[i]);
+      }  
+      delay_ms(2);                  
+  }
+
+  set_lut();
+  ssend_command(DISPLAY_REFRESH); 
+  delay_ms(100);
+  swait_until_idle();
+  
+}
+
 void sdisplay_frame_75(const unsigned char* frame_buffer){
   unsigned char temp1, temp2;
   ssend_command(DATA_START_TRANSMISSION_1);
@@ -344,6 +372,9 @@ void sdisplay_frame_fast(const unsigned char* frame_buffer) {
     GOODDISPLAY42:
       sdisplay_frame_fast_42(frame_buffer);
       break;
+    WAVESHARE2IN7:
+      sdisplay_frame_fast_27(frame_buffer);
+      break;
   }
 }
 
@@ -378,6 +409,33 @@ void sdisplay_frame_fast_42(const unsigned char* frame_buffer){
   ssend_command(DISPLAY_REFRESH); 
   swait_until_idle();
   return;
+}
+
+void sdisplay_frame_fast_27(const unsigned char* frame_buffer){
+  unsigned int width = 264, height = 176;
+  ssend_command(RESOLUTION_SETTING);
+  ssend_data(width >> 8);        
+  ssend_data(width & 0xff);
+  ssend_data(height >> 8);
+  ssend_data(height & 0xff);
+
+  if (frame_buffer != NULL) {
+      ssend_command(DATA_START_TRANSMISSION_1);
+      for(int i = 0; i < width / 8 * height; i++) {
+          ssend_data(0xFF);      // bit set: white, bit reset: black
+      }
+      delay_ms(2);
+      ssend_command(DATA_START_TRANSMISSION_2); 
+      for(int i = 0; i < width / 8 * height; i++) {
+          ssend_data(frame_buffer[i]);
+      }  
+      delay_ms(2);                  
+  }
+
+  set_fast_lut(); //Fast LUT for 2.7" is same as for 4.2"
+  ssend_command(DISPLAY_REFRESH); 
+  delay_ms(100);
+  swait_until_idle();
 }
 
 void swait_until_idle(void) {
@@ -581,7 +639,38 @@ void set_lut(void) {
     case GOODDISPLAY42:
       set_lut_42();
       break;
+    case WAVESHARE2IN7:
+      set_lut_27();
+      break;
   }
+}
+
+void set_lut_27(void) {
+  unsigned int count;
+  ssend_command(LUT_FOR_VCOM);
+  for(count = 0; count < 44; count++) {
+    ssend_data(lut_vcom0_27[count]);
+  }
+  
+  ssend_command(LUT_WHITE_TO_WHITE);
+  for(count = 0; count < 42; count++) {
+    ssend_data(lut_ww_27[count]);
+  }   
+  
+  ssend_command(LUT_BLACK_TO_WHITE);
+  for(count = 0; count < 42; count++) {
+    ssend_data(lut_bw_27[count]);
+  } 
+
+  ssend_command(LUT_WHITE_TO_BLACK);
+  for(count = 0; count < 42; count++) {
+    ssend_data(lut_wb_27[count]);
+  } 
+
+  ssend_command(LUT_BLACK_TO_BLACK);
+  for(count = 0; count < 42; count++) {
+    ssend_data(lut_bb_27[count]);
+  } 
 }
 
 void set_lut_42(void) {
@@ -641,6 +730,61 @@ void set_fast_lut(void) {
 }
 
 
+const unsigned char lut_vcom0_27[] =
+{
+0x00, 0x00,
+0x00, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x00, 0x32, 0x32, 0x00, 0x00, 0x02,
+0x00, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+const unsigned char lut_ww_27[] =
+{
+0x50, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x60, 0x32, 0x32, 0x00, 0x00, 0x02,
+0xA0, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+const unsigned char lut_bw_27[] =
+{
+0x50, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x60, 0x32, 0x32, 0x00, 0x00, 0x02,
+0xA0, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+const unsigned char lut_bb_27[] =
+{
+0xA0, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x60, 0x32, 0x32, 0x00, 0x00, 0x02,
+0x50, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+const unsigned char lut_wb_27[] =
+{
+0xA0, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x60, 0x32, 0x32, 0x00, 0x00, 0x02,
+0x50, 0x0F, 0x0F, 0x00, 0x00, 0x05,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
 
 const unsigned char lut_vcom0_42[] =
 {
@@ -752,7 +896,7 @@ const unsigned char lut_wb_fast_42[] ={
 
 /*
  * Helper functions for waveshare2in7
- */
+
 
 int nearest_mult_eight(int num, bool round_up) {
   if(round_up) {
@@ -762,4 +906,5 @@ int nearest_mult_eight(int num, bool round_up) {
     return (number / 8) * 8;
   }
 }
+*/
 

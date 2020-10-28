@@ -24,9 +24,9 @@ typedef enum {GOODDISPLAY75, GOODDISPLAY42, WAVESHARE2IN7} screen_type_t;
  *   - USE_GOODDISPLAY42 for waveshare/good display 4.2" screen.
  *   - USE_WAVESHARE2IN7 for waveshare 2.7" screen
  */
-#define USE_GOODDISPLAY42
+// #define USE_GOODDISPLAY42
 // #define USE_GOODDISPLAY75
-//#define USE_WAVESHARE2IN7
+#define USE_WAVESHARE2IN7
 
 #ifdef USE_GOODDISPLAY75
 #include "gooddisplay75_pinout.h"

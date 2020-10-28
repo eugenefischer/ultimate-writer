@@ -14,7 +14,7 @@
 #define COLORED                                     1
 #define UNCOLORED                                   0
 
-typedef enum {GOODDISPLAY75, GOODDISPLAY42, WAVESHARE2IN7} screen_type_t;
+typedef enum {GOODDISPLAY75, GOODDISPLAY42, WAVESHARE2IN7} screen_type;
 
 /*
  * Screen installed on the typewriter.

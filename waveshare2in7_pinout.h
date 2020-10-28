@@ -8,7 +8,7 @@
 #define CS_PIN          8
 #define BUSY_PIN        24
 
-// EPD4IN2 commands
+// EPD2IN7 commands
 #define PANEL_SETTING                               0x00
 #define POWER_SETTING                               0x01
 #define POWER_OFF                                   0x02

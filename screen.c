@@ -9,8 +9,8 @@ int sorientation = ROTATE_0;
 
 //putting in variables that should come from config.h
 //I don't know why they aren't showing up during compile
-int rows = 16;
-int cols =7;
+unsigned int rows = 16;
+unsigned int cols =7;
 unsigned int screen_type = WAVESHARE2IN7;
 
 

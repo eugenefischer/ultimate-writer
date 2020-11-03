@@ -198,7 +198,12 @@ int init_waveshare_27(void) {
   if (init_if() != 0) {
     exit(-1);
   }
-  sreset();
+  digital_write(RST_PIN, HIGH);
+  delay_ms(200);
+  digital_write(RST_PIN, LOW);
+  delay_ms(10);
+  digital_write(RST_PIN, HIGH);
+  delay_ms(200);
   ssend_command(POWER_SETTING);
   ssend_data(0x03);                  // VDS_EN, VDG_EN
   ssend_data(0x00);                  // VCOM_HV, VGHL_LV[1], VGHL_LV[0]

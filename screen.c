@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int sorientation = ROTATE_0;
+int sorientation = ROTATE_90;
 
 //putting in variables that should come from config.h
 //I don't know why they aren't showing up during compile

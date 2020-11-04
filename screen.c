@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int sorientation = ROTATE_90;
+int sorientation = ROTATE_0;
 
 //Interface-Level primitives
 //==========================

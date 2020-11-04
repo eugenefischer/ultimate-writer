@@ -1,6 +1,6 @@
 // Display resolution
-#define EPD_WIDTH       264
-#define EPD_HEIGHT      176
+#define EPD_WIDTH       176
+#define EPD_HEIGHT      264
 
 // Pin definition
 #define RST_PIN         17
